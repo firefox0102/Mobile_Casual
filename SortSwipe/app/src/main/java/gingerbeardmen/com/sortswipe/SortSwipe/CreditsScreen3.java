@@ -7,11 +7,11 @@ import gingerbeardmen.com.sortswipe.framework.Screen;
 import gingerbeardmen.com.sortswipe.framework.Input.TouchEvent;
 
 /**
- * Created by Peter on 9/21/2014.
+ * Created by Peter on 9/23/2014.
  */
-public class HelpScreen3 extends Screen {
+public class CreditsScreen3 extends Screen{
 
-    public HelpScreen3(Game game) {
+    public CreditsScreen3(Game game) {
         super(game);
     }
 
@@ -38,7 +38,7 @@ public class HelpScreen3 extends Screen {
     public void present(float deltaTime) {
         Graphics g = game.getGraphics();
         g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.help3, 64, 100);
+        g.drawPixmap(Assets.credits3, 64, 100);
         g.drawPixmap(Assets.buttons, 256, 416, 0, 128, 64, 64);
     }
 

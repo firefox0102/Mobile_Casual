@@ -62,13 +62,12 @@ public class GameScreen extends Screen {
                 }
             }
             if(event.type == TouchEvent.TOUCH_DOWN) {
-                /*
                 if(event.x < 64 && event.y > 416) {
-                    world.snake.turnLeft();
+                    state = GameState.GameOver;
                 }
                 if(event.x > 256 && event.y > 416) {
-                    world.snake.turnRight();
-                }*/
+                    state = GameState.GameOver;
+                }
             }
         }
 
@@ -146,6 +145,9 @@ public class GameScreen extends Screen {
 
     private void drawWorld(World world) {
         Graphics g = game.getGraphics();
+
+
+
         /*
         Snake snake = world.snake;
         SnakePart head = snake.parts.get(0);

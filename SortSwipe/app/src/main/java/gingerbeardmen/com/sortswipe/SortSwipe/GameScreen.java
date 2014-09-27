@@ -57,7 +57,7 @@ public class GameScreen extends Screen {
         int len = touchEvents.size();
 
         //If the phone is being shaken!!!
-        if((game.getmAccel() > 12) && (world.cardList.size() > 0) && !inFlingEvent) {
+        if((game.getmAccel() > 12) && (world.cardList.size() > 0) && (!inShakeEvent && !inFlingEvent)) {
             inShakeEvent = true;
             checkShakeEvent(world.cardList.get(0));
         } else {
@@ -70,7 +70,6 @@ public class GameScreen extends Screen {
             //Pause the game
             if(event.type == Input.TouchEvent.TOUCH_UP) {
                 Log.v("Blah", "Touch event! TOUCH UP!!!!");
-                inFlingEvent = false;
 
                 if(event.x < 64 && event.y < 64) {
                     if(Settings.soundEnabled)
@@ -91,10 +90,8 @@ public class GameScreen extends Screen {
                     Log.v("Blah", "Touch event! Dragged!" + event.x + ", " + event.y);
                     if(!topCard.hasBeenFlung && !inShakeEvent) {
                         if ((event.x > topCard.x && event.y > topCard.y) && (event.x < (topCard.x + 100) && event.y < (topCard.y + 100))) {
-                            Log.v("Output", "Touch event! Touch Down!");
-                            //TODO:: some sort of fling method for directions
                             checkFlingEvent(event.x, event.y, topCard);
-                            //inFlingEvent = false;
+                            inFlingEvent = false;
                         }
                     }
                 }
@@ -158,7 +155,7 @@ public class GameScreen extends Screen {
         }
     }
 
-    private boolean checkFlingEvent(int x, int y, Card topCard) {
+    private void checkFlingEvent(int x, int y, Card topCard) {
         if((topCard.x != x) || (topCard.y != y)) {
             topCard.x = x - 50;
             topCard.y = y - 50;
@@ -177,9 +174,6 @@ public class GameScreen extends Screen {
                 inFlingEvent = true;
                 flingLeft(topCard);
             }
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -230,6 +224,7 @@ public class GameScreen extends Screen {
             success = true;
         } else {
             Assets.bitten.play(1);
+            topCard.hasBeenFlung = false;
             topCard.resetPosition();
         }
         return success;

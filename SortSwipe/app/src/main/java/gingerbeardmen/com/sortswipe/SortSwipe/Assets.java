@@ -24,6 +24,12 @@ public class Assets {
     public static Pixmap levelSelect;
     public static Pixmap stageSelect;
 
+    public static Pixmap card1;
+    public static Pixmap card2;
+    public static Pixmap card3;
+    public static Pixmap card4;
+    public static Pixmap card5;
+    //Add other pictures here
 
     public static Sound click;
     public static Sound eat;

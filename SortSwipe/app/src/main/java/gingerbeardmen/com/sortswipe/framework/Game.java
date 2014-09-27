@@ -17,4 +17,6 @@ public interface Game {
     public Screen getCurrentScreen();
 
     public Screen getStartScreen();
+
+    public float getmAccel();
 }

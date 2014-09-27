@@ -30,6 +30,8 @@ public class LoadingScreen extends Screen {
         Assets.ready = g.newPixmap("ready.png", PixmapFormat.ARGB4444);
         Assets.pause = g.newPixmap("pausemenu.png", PixmapFormat.ARGB4444);
         Assets.gameOver = g.newPixmap("gameover.png", PixmapFormat.ARGB4444);
+        Assets.levelSelect = g.newPixmap("levelSelect.png", PixmapFormat.ARGB4444);
+        Assets.stageSelect = g.newPixmap("stageSelect.png", PixmapFormat.ARGB4444);
         Assets.click = game.getAudio().newSound("click.ogg");
         Assets.eat = game.getAudio().newSound("eat.ogg");
         Assets.bitten = game.getAudio().newSound("bitten.ogg");

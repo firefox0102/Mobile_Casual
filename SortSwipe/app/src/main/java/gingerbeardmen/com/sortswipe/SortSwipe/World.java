@@ -1,6 +1,8 @@
 package gingerbeardmen.com.sortswipe.SortSwipe;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
 
 /**
  * Created by Peter on 9/21/2014.
@@ -13,6 +15,7 @@ public class World {
     static final float TICK_INITIAL = 0.5f;
     static final float TICK_DECREMENT = 0.05f;
 
+    public List<Card> cardList = new ArrayList<Card>();
     public boolean gameOver = false;;
     public int score = 0;
 
@@ -23,13 +26,13 @@ public class World {
 
     public World() {
         //TODO initialize game objects
+        placeCards();
     }
 
-    private void placeStain() {
-        for (int x = 0; x < WORLD_WIDTH; x++) {
-            for (int y = 0; y < WORLD_HEIGHT; y++) {
-                fields[x][y] = false;
-            }
+    public void placeCards() {
+        //TODO:: build the stack of cards
+        for(int i = 0; i < 15; i++) {
+            cardList.add(new Card(random.nextInt(5)));
         }
     }
 

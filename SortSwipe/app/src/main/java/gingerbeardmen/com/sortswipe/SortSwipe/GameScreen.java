@@ -2,8 +2,10 @@ package gingerbeardmen.com.sortswipe.SortSwipe;
 
 import java.util.List;
 import android.graphics.Color;
+import android.util.Log;
 import gingerbeardmen.com.sortswipe.framework.Game;
 import gingerbeardmen.com.sortswipe.framework.Graphics;
+import gingerbeardmen.com.sortswipe.framework.Input;
 import gingerbeardmen.com.sortswipe.framework.Input.TouchEvent;
 import gingerbeardmen.com.sortswipe.framework.Pixmap;
 import gingerbeardmen.com.sortswipe.framework.Screen;
@@ -23,6 +25,8 @@ public class GameScreen extends Screen {
     World world;
     int oldScore = 0;
     String score = "0";
+    boolean inFlingEvent = false;
+    boolean inShakeEvent = false;
 
     public GameScreen(Game game) {
         super(game);
@@ -51,9 +55,23 @@ public class GameScreen extends Screen {
 
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime) {
         int len = touchEvents.size();
+
+        //If the phone is being shaken!!!
+        if((game.getmAccel() > 12) && (world.cardList.size() > 0) && !inFlingEvent) {
+            inShakeEvent = true;
+            checkShakeEvent(world.cardList.get(0));
+        } else {
+            inShakeEvent = false;
+        }
+
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
-            if(event.type == TouchEvent.TOUCH_UP) {
+
+            //Pause the game
+            if(event.type == Input.TouchEvent.TOUCH_UP) {
+                Log.v("Blah", "Touch event! TOUCH UP!!!!");
+                inFlingEvent = false;
+
                 if(event.x < 64 && event.y < 64) {
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
@@ -61,13 +79,29 @@ public class GameScreen extends Screen {
                     return;
                 }
             }
-            if(event.type == TouchEvent.TOUCH_DOWN) {
-                if(event.x < 64 && event.y > 416) {
-                    state = GameState.GameOver;
+
+            if(event.type == Input.TouchEvent.TOUCH_DOWN) {
+            }
+
+            if(world.cardList.size() > 0) {
+                Card topCard = world.cardList.get(0);
+
+                //Dragging Events
+                if (event.type == Input.TouchEvent.TOUCH_DRAGGED) {
+                    Log.v("Blah", "Touch event! Dragged!" + event.x + ", " + event.y);
+                    if(!topCard.hasBeenFlung && !inShakeEvent) {
+                        if ((event.x > topCard.x && event.y > topCard.y) && (event.x < (topCard.x + 100) && event.y < (topCard.y + 100))) {
+                            Log.v("Output", "Touch event! Touch Down!");
+                            //TODO:: some sort of fling method for directions
+                            checkFlingEvent(event.x, event.y, topCard);
+                            //inFlingEvent = false;
+                        }
+                    }
                 }
-                if(event.x > 256 && event.y > 416) {
-                    state = GameState.GameOver;
-                }
+            } else {
+                //TODO:: This is where the game either needs to end, or something needs to happen
+                //world.placeCards();
+                state = GameState.GameOver;
             }
         }
 
@@ -124,6 +158,132 @@ public class GameScreen extends Screen {
         }
     }
 
+    private boolean checkFlingEvent(int x, int y, Card topCard) {
+        if((topCard.x != x) || (topCard.y != y)) {
+            topCard.x = x - 50;
+            topCard.y = y - 50;
+            int middleX = x, middleY = y;
+            //Checking if the card has been dragged into the boundaries of a sorting direction
+            if(middleY > 340) {
+                inFlingEvent = true;
+                flingDown(topCard);
+            } else if(middleY < 140) {
+                inFlingEvent = true;
+                flingUp(topCard);
+            } else if(middleX > 245) {
+                inFlingEvent = true;
+                flingRight(topCard);
+            } else if (middleX < 75) {
+                inFlingEvent = true;
+                flingLeft(topCard);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean flingLeft(Card topCard) {
+        Log.v("FLING LEFT", "Flinging LEFT!!!");
+        topCard.hasBeenFlung = true;
+        if(checkSuccess(topCard, Card.TYPE_1)) {
+            moveCardOffScreen(topCard, Card.TYPE_1);
+        }
+        return true;
+    }
+
+    private boolean flingRight(Card topCard) {
+        Log.v("FLING RIGHT", "Flinging RIGHT!!!");
+        topCard.hasBeenFlung = true;
+        if(checkSuccess(topCard, Card.TYPE_2)) {
+            moveCardOffScreen(topCard, Card.TYPE_2);
+        }
+        return true;
+    }
+
+    private boolean flingUp(Card topCard) {
+        Log.v("FLING UP", "Flinging UP!!!");
+        topCard.hasBeenFlung = true;
+        if(checkSuccess(topCard, Card.TYPE_3)) {
+            moveCardOffScreen(topCard, Card.TYPE_3);
+        }
+        return true;
+    }
+
+    private boolean flingDown(Card topCard) {
+        Log.v("FLING DOWN", "Flinging DOWN!!!");
+        topCard.hasBeenFlung = true;
+        if(checkSuccess(topCard, Card.TYPE_4)) {
+            moveCardOffScreen(topCard, Card.TYPE_4);
+        }
+        return true;
+    }
+
+    private boolean checkSuccess(Card topCard, int type) {
+        boolean success = false;
+        if(topCard.type == type) {
+            if(topCard.type == Card.TYPE_5) {
+                world.score += 5;
+            } else {
+                world.score += 1;
+            }
+            success = true;
+        } else {
+            Assets.bitten.play(1);
+            topCard.resetPosition();
+        }
+        return success;
+    }
+
+    private void moveCardOffScreen(Card topCard, int direction) {
+        switch (direction) {
+            case Card.TYPE_1:
+                Log.v("moveOffScreen", "Moving left");
+                //Move left
+                while(topCard.x >= 0) {
+                    topCard.x--;
+                }
+                world.cardList.remove(0);
+                break;
+            case Card.TYPE_2:
+                Log.v("moveOffScreen", "Moving right");
+                //Move right
+                while(topCard.x <= 320) {
+                    topCard.x++;
+                }
+                world.cardList.remove(0);
+                break;
+            case Card.TYPE_3:
+                Log.v("moveOffScreen", "Moving up");
+                //Move up
+                while(topCard.y >= 0) {
+                    topCard.y--;
+                }
+                world.cardList.remove(0);
+                break;
+            case Card.TYPE_4:
+                Log.v("moveOffScreen", "Moving down");
+                //Move down
+                while(topCard.y <= 480) {
+                    topCard.y++;
+                }
+                world.cardList.remove(0);
+                break;
+            case Card.TYPE_5:
+                //Explode!!!
+                world.cardList.remove(0);
+                break;
+        }
+    }
+
+    private boolean checkShakeEvent(Card topCard) {
+        Log.v("SHAKE EVENT **", "SHAKE EVENT HAS BEEN TRIPPED");
+        if(checkSuccess(topCard, Card.TYPE_5)) {
+            //TODO:: Do shit for shaking the phone
+            moveCardOffScreen(topCard, Card.TYPE_5);
+        }
+        return true;
+    }
 
     @Override
     public void present(float deltaTime) {
@@ -140,19 +300,14 @@ public class GameScreen extends Screen {
         if(state == GameState.GameOver)
             drawGameOverUI();
 
-        drawText(g, score, g.getWidth() / 2 - score.length()*20 / 2, g.getHeight() - 42);
+        drawText(g, score, g.getWidth()- 50 - score.length()*20 / 2, 10);
     }
 
     private void drawWorld(World world) {
         Graphics g = game.getGraphics();
 
-
-
         /*
-        Snake snake = world.snake;
-        SnakePart head = snake.parts.get(0);
         Stain stain = world.stain;
-
 
         Pixmap stainPixmap = null;
         if(stain.type == Stain.TYPE_1)
@@ -164,27 +319,6 @@ public class GameScreen extends Screen {
         int x = stain.x * 32;
         int y = stain.y * 32;
         g.drawPixmap(stainPixmap, x, y);
-
-        int len = snake.parts.size();
-        for(int i = 1; i < len; i++) {
-            SnakePart part = snake.parts.get(i);
-            x = part.x * 32;
-            y = part.y * 32;
-            g.drawPixmap(Assets.tail, x, y);
-        }
-
-        Pixmap headPixmap = null;
-        if(snake.direction == Snake.UP)
-            headPixmap = Assets.headUp;
-        if(snake.direction == Snake.LEFT)
-            headPixmap = Assets.headLeft;
-        if(snake.direction == Snake.DOWN)
-            headPixmap = Assets.headDown;
-        if(snake.direction == Snake.RIGHT)
-            headPixmap = Assets.headRight;
-        x = head.x * 32 + 16;
-        y = head.y * 32 + 16;
-        g.drawPixmap(headPixmap, x - headPixmap.getWidth() / 2, y - headPixmap.getHeight() / 2);
         */
     }
 
@@ -198,10 +332,32 @@ public class GameScreen extends Screen {
     private void drawRunningUI() {
         Graphics g = game.getGraphics();
 
+        //Pause button
         g.drawPixmap(Assets.buttons, 0, 0, 64, 128, 64, 64);
-        g.drawLine(0, 416, 480, 416, Color.BLACK);
-        g.drawPixmap(Assets.buttons, 0, 416, 64, 64, 64, 64);
-        g.drawPixmap(Assets.buttons, 256, 416, 0, 64, 64, 64);
+
+        if(world.cardList.size() > 0) {
+            Card topCard = world.cardList.get(0);
+
+            Pixmap cardPixmap = null;
+            if (topCard.type == Card.TYPE_1)
+                cardPixmap = Assets.card1;
+            if (topCard.type == Card.TYPE_2)
+                cardPixmap = Assets.card2;
+            if (topCard.type == Card.TYPE_3)
+                cardPixmap = Assets.card3;
+            if (topCard.type == Card.TYPE_4)
+                cardPixmap = Assets.card4;
+            if (topCard.type == Card.TYPE_5)
+                cardPixmap = Assets.card5;
+//        int x = topCard.x * 32;
+//        int y = topCard.y * 32;
+            g.drawPixmap(cardPixmap, topCard.x, topCard.y);
+        }
+
+        //g.drawLine(0, 416, 480, 416, Color.BLACK);
+        //Arrow buttons
+        //g.drawPixmap(Assets.buttons, 0, 416, 64, 64, 64, 64);
+        //g.drawPixmap(Assets.buttons, 256, 416, 0, 64, 64, 64);
     }
 
     private void drawPausedUI() {
@@ -215,8 +371,8 @@ public class GameScreen extends Screen {
         Graphics g = game.getGraphics();
 
         g.drawPixmap(Assets.gameOver, 62, 100);
+
         g.drawPixmap(Assets.buttons, 128, 200, 0, 128, 64, 64);
-        g.drawLine(0, 416, 480, 416, Color.BLACK);
     }
 
     public void drawText(Graphics g, String line, int x, int y) {
@@ -262,6 +418,5 @@ public class GameScreen extends Screen {
 
     @Override
     public void dispose() {
-
     }
 }

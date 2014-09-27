@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -29,6 +33,11 @@ public abstract class AndroidGame extends Activity implements Game {
     FileIO fileIO;
     Screen screen;
     WakeLock wakeLock;
+
+    private SensorManager mSensorManager;
+    private float mAccel; // acceleration apart from gravity
+    private float mAccelCurrent; // current acceleration including gravity
+    private float mAccelLast; // last acceleration including gravity
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,13 @@ public abstract class AndroidGame extends Activity implements Game {
         screen = getStartScreen();
         setContentView(renderView);
 
+        //Sensor manager for shake events
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
+
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "GLGame");
     }
@@ -67,6 +83,7 @@ public abstract class AndroidGame extends Activity implements Game {
         wakeLock.acquire();
         screen.resume();
         renderView.resume();
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -75,6 +92,7 @@ public abstract class AndroidGame extends Activity implements Game {
         wakeLock.release();
         renderView.pause();
         screen.pause();
+        mSensorManager.unregisterListener(mSensorListener);
 
         if (isFinishing())
             screen.dispose();
@@ -115,4 +133,23 @@ public abstract class AndroidGame extends Activity implements Game {
     public Screen getCurrentScreen() {
         return screen;
     }
+
+    public float getmAccel() {
+        return mAccel;
+    }
+
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+        public void onSensorChanged(SensorEvent se) {
+            float x = se.values[0];
+            float y = se.values[1];
+            float z = se.values[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta; // perform low-cut filter
+        }
+
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
 }

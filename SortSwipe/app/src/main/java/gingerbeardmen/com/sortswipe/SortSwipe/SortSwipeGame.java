@@ -11,4 +11,9 @@ public class SortSwipeGame extends AndroidGame {
     public Screen getStartScreen() {
         return new LoadingScreen(this);
     }
+
+    @Override
+    public float getmAccel() {
+        return super.getmAccel();
+    }
 }

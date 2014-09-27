@@ -56,6 +56,17 @@ public class LevelSelectScreen extends Screen {
                         Assets.click.play(1);
                     return;
                 }
+                /**
+                 * Goes back to menu
+                 */
+                if(inBounds(event,98,410,124,53))
+                {
+                    game.setScreen(new MainMenuScreen(game));
+                    if(Settings.soundEnabled)
+                        Assets.click.play(1);
+                    return;
+                }
+
             }
         }
     }

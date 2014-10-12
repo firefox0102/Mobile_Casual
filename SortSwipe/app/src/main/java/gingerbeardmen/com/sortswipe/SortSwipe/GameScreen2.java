@@ -1,6 +1,7 @@
 package gingerbeardmen.com.sortswipe.SortSwipe;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.util.List;
 
@@ -33,7 +34,6 @@ public class GameScreen2 extends Screen {
     @Override
     public void update(float deltaTime) {
         List<Input.TouchEvent> touchEvents = game.getInput().getTouchEvents();
-        game.getInput().getKeyEvents();
 
         if(state == GameState.Ready)
             updateReady(touchEvents);
@@ -54,6 +54,7 @@ public class GameScreen2 extends Screen {
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
             Input.TouchEvent event = touchEvents.get(i);
+            //Pause the game
             if(event.type == Input.TouchEvent.TOUCH_UP) {
                 if(event.x < 64 && event.y < 64) {
                     if(Settings.soundEnabled)
@@ -62,13 +63,15 @@ public class GameScreen2 extends Screen {
                     return;
                 }
             }
+            //End the game
             if(event.type == Input.TouchEvent.TOUCH_DOWN) {
-                if(event.x < 64 && event.y > 416) {
-                    state = GameState.GameOver;
+                if((event.x > 110 && event.y > 190)&&(event.x < 210 && event.y < 290)) {
+                    Log.v("Blah", "Touch event! Touch Down!");
                 }
-                if(event.x > 256 && event.y > 416) {
-                    state = GameState.GameOver;
-                }
+            }
+            //Fling
+            if(event.type == Input.TouchEvent.TOUCH_DRAGGED) {
+                Log.v("Blah", "Touch event! Dragged!");
             }
         }
 

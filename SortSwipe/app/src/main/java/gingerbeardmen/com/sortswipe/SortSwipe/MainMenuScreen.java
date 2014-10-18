@@ -10,12 +10,23 @@ import gingerbeardmen.com.sortswipe.framework.Screen;
  * Created by Peter on 9/21/2014.
  */
 public class MainMenuScreen extends Screen {
+    boolean isMusicPlaying;
+
     public MainMenuScreen(Game game) {
         super(game);
+        isMusicPlaying = false;
     }
 
     @Override
     public void update(float deltaTime) {
+        if(!isMusicPlaying && Settings.soundEnabled) {
+            Assets.music.play();
+            isMusicPlaying = true;
+        }
+        if(!Settings.soundEnabled) {
+            Assets.music.stop();
+        }
+
         Graphics g = game.getGraphics();
         List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
         game.getInput().getKeyEvents();

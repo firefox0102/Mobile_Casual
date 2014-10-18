@@ -75,14 +75,14 @@ public class GameScreen3 extends Screen {
         world.update(deltaTime);
         if(world.gameOver) {
             if(Settings.soundEnabled)
-                Assets.bitten.play(1);
+                Assets.fail.play(1);
             state = GameState.GameOver;
         }
         if(oldScore != world.score) {
             oldScore = world.score;
             score = "" + oldScore;
             if(Settings.soundEnabled)
-                Assets.eat.play(1);
+                Assets.success.play(1);
         }
     }
 

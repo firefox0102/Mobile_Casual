@@ -39,9 +39,13 @@ public class LoadingScreen extends Screen {
         Assets.card5 = g.newPixmap("card5.png", PixmapFormat.ARGB4444);
 
         //Sound Assets
-        Assets.click = game.getAudio().newSound("click.ogg");
-        Assets.eat = game.getAudio().newSound("eat.ogg");
-        Assets.bitten = game.getAudio().newSound("bitten.ogg");
+        Assets.click = game.getAudio().newSound("click.wav");
+        Assets.success = game.getAudio().newSound("success.wav");
+        Assets.fail = game.getAudio().newSound("fail.wav");
+        Assets.explosion = game.getAudio().newSound("explode.wav");
+        //Game Music
+        //YEAH by Nicholas Shooter, may be found at https://soundcloud.com/nicholas-shooter/yeah
+        Assets.music = game.getAudio().newMusic("music.wav");
 
         Settings.load(game.getFileIO());
         game.setScreen(new MainMenuScreen(game));

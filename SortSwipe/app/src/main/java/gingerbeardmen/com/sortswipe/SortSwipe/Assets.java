@@ -1,5 +1,6 @@
 package gingerbeardmen.com.sortswipe.SortSwipe;
 
+import gingerbeardmen.com.sortswipe.framework.Music;
 import gingerbeardmen.com.sortswipe.framework.Pixmap;
 import gingerbeardmen.com.sortswipe.framework.Sound;
 
@@ -31,7 +32,9 @@ public class Assets {
     public static Pixmap card5;
     //Add other pictures here
 
+    public static Music music;
     public static Sound click;
-    public static Sound eat;
-    public static Sound bitten;
+    public static Sound success;
+    public static Sound fail;
+    public static Sound explosion;
 }

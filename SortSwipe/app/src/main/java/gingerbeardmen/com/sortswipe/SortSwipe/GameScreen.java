@@ -31,6 +31,7 @@ public class GameScreen extends Screen {
     public GameScreen(Game game) {
         super(game);
         world = new World();
+        Assets.music.stop(); //Halts the main menu music
     }
 
     @Override
@@ -105,14 +106,12 @@ public class GameScreen extends Screen {
         world.update(deltaTime);
         if(world.gameOver) {
             if(Settings.soundEnabled)
-                Assets.bitten.play(1);
+                Assets.explosion.play(1);
             state = GameState.GameOver;
         }
         if(oldScore != world.score) {
             oldScore = world.score;
             score = "" + oldScore;
-            if(Settings.soundEnabled)
-                Assets.eat.play(1);
         }
     }
 
@@ -217,13 +216,15 @@ public class GameScreen extends Screen {
         boolean success = false;
         if(topCard.type == type) {
             if(topCard.type == Card.TYPE_5) {
+                Assets.explosion.play(1);
                 world.score += 5;
             } else {
+                Assets.success.play(1);
                 world.score += 1;
             }
             success = true;
         } else {
-            Assets.bitten.play(1);
+            Assets.fail.play(1);
             topCard.hasBeenFlung = false;
             topCard.resetPosition();
         }

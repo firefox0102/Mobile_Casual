@@ -41,10 +41,8 @@ public class World {
             return;
 
         tickTime += deltaTime;
-
         while (tickTime > tick) {
             tickTime -= tick; //Increment the counter
-
         }
     }
 }

@@ -23,6 +23,7 @@ public class GameScreen extends Screen {
 
     GameState state = GameState.Ready;
     World world;
+    float gameTime = 0;
     int oldScore = 0;
     String score = "0";
     boolean inFlingEvent = false;
@@ -56,6 +57,7 @@ public class GameScreen extends Screen {
 
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime) {
         int len = touchEvents.size();
+        gameTime += deltaTime;
 
         //If the phone is being shaken!!!
         if((game.getmAccel() > 12) && (world.cardList.size() > 0) && (!inShakeEvent && !inFlingEvent)) {
@@ -295,7 +297,9 @@ public class GameScreen extends Screen {
             drawPausedUI();
         if(state == GameState.GameOver)
             drawGameOverUI();
-
+        //Timer should go at the top of the screen so that the user can actually see it
+        drawText(g, "" + (int)gameTime, g.getWidth()- 50 - score.length()*20 / 2, 10);
+        //Score goes at the bottom of the screen to utilize the unused screen space down there
         drawText(g, score, g.getWidth()- 50 - score.length()*20 / 2, 10);
     }
 
@@ -343,8 +347,10 @@ public class GameScreen extends Screen {
                 cardPixmap = Assets.card3;
             if (topCard.type == Card.TYPE_4)
                 cardPixmap = Assets.card4;
-            if (topCard.type == Card.TYPE_5)
+            if (topCard.type == Card.TYPE_5) {
                 cardPixmap = Assets.card5;
+                //TODO:: Add particle effect to card
+            }
 //        int x = topCard.x * 32;
 //        int y = topCard.y * 32;
             g.drawPixmap(cardPixmap, topCard.x, topCard.y);

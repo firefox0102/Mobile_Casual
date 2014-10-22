@@ -16,7 +16,6 @@ public class LoadingScreen extends Screen {
     @Override
     public void update(float deltaTime) {
         Graphics g = game.getGraphics();
-        Assets.background = g.newPixmap("background.png", PixmapFormat.RGB565);
         Assets.logo = g.newPixmap("logo.png", PixmapFormat.ARGB4444);
         Assets.mainMenu = g.newPixmap("mainmenu.png", PixmapFormat.ARGB4444);
         Assets.buttons = g.newPixmap("buttons.png", PixmapFormat.ARGB4444);
@@ -27,16 +26,37 @@ public class LoadingScreen extends Screen {
         Assets.credits2 = g.newPixmap("credits2.png", PixmapFormat.ARGB4444);
         Assets.credits3 = g.newPixmap("credits3.png", PixmapFormat.ARGB4444);
         Assets.numbers = g.newPixmap("numbers.png", PixmapFormat.ARGB4444);
-        Assets.ready = g.newPixmap("ready.png", PixmapFormat.ARGB4444);
         Assets.pause = g.newPixmap("pausemenu.png", PixmapFormat.ARGB4444);
         Assets.gameOver = g.newPixmap("gameover.png", PixmapFormat.ARGB4444);
         Assets.levelSelect = g.newPixmap("levelSelect.png", PixmapFormat.ARGB4444);
-        Assets.stageSelect = g.newPixmap("stageSelect.png", PixmapFormat.ARGB4444);
-        Assets.card1 = g.newPixmap("card1.png", PixmapFormat.ARGB4444);
-        Assets.card2 = g.newPixmap("card2.png", PixmapFormat.ARGB4444);
-        Assets.card3 = g.newPixmap("card3.png", PixmapFormat.ARGB4444);
-        Assets.card4 = g.newPixmap("card4.png", PixmapFormat.ARGB4444);
-        Assets.card5 = g.newPixmap("card5.png", PixmapFormat.ARGB4444);
+        Assets.background = g.newPixmap("background.png", PixmapFormat.RGB565);
+
+        //Loading level 1 assets
+        Assets.lev1card1 = g.newPixmap("level1/level1card1.png", PixmapFormat.ARGB4444);
+        Assets.lev1card2 = g.newPixmap("level1/level1card2.png", PixmapFormat.ARGB4444);
+        Assets.lev1card3 = g.newPixmap("level1/level1card3.png", PixmapFormat.ARGB4444);
+        Assets.lev1card4 = g.newPixmap("level1/level1card4.png", PixmapFormat.ARGB4444);
+        Assets.lev1card5 = g.newPixmap("level1/level1card5.png", PixmapFormat.ARGB4444);
+        Assets.level1background = g.newPixmap("level1/level1background.png", PixmapFormat.RGB565);
+        Assets.level1ready = g.newPixmap("level1/level1ready.png", PixmapFormat.ARGB4444);
+
+        //Loading level 2 assets
+        Assets.lev2card1 = g.newPixmap("level2/level2card1.png", PixmapFormat.ARGB4444);
+        Assets.lev2card2 = g.newPixmap("level2/level2card2.png", PixmapFormat.ARGB4444);
+        Assets.lev2card3 = g.newPixmap("level2/level2card3.png", PixmapFormat.ARGB4444);
+        Assets.lev2card4 = g.newPixmap("level2/level2card4.png", PixmapFormat.ARGB4444);
+        Assets.lev2card5 = g.newPixmap("level2/level2card5.png", PixmapFormat.ARGB4444);
+        Assets.level2background = g.newPixmap("level2/level2background.png", PixmapFormat.RGB565);
+        Assets.level2ready = g.newPixmap("level2/level2ready.png", PixmapFormat.ARGB4444);
+
+        //Loading level 3 assets
+        Assets.lev3card1 = g.newPixmap("level3/level3card1.png", PixmapFormat.ARGB4444);
+        Assets.lev3card2 = g.newPixmap("level3/level3card2.png", PixmapFormat.ARGB4444);
+        Assets.lev3card3 = g.newPixmap("level3/level3card3.png", PixmapFormat.ARGB4444);
+        Assets.lev3card4 = g.newPixmap("level3/level3card4.png", PixmapFormat.ARGB4444);
+        Assets.lev3card5 = g.newPixmap("level3/level3card5.png", PixmapFormat.ARGB4444);
+        Assets.level3background = g.newPixmap("level3/level3background.png", PixmapFormat.RGB565);
+        Assets.level3ready = g.newPixmap("level3/level3ready.png", PixmapFormat.ARGB4444);
 
         //Sound Assets
         Assets.click = game.getAudio().newSound("click.wav");

@@ -25,13 +25,25 @@ public class GameScreen extends Screen {
     World world;
     float gameTime = 0;
     int oldScore = 0;
+    int currentLevel;
     String score = "0";
     boolean inFlingEvent = false;
     boolean inShakeEvent = false;
 
-    public GameScreen(Game game) {
+    //Assets for the level
+    Pixmap card1Asset;
+    Pixmap card2Asset;
+    Pixmap card3Asset;
+    Pixmap card4Asset;
+    Pixmap card5Asset;
+    Pixmap readyAsset;
+    Pixmap levelbackground;
+
+    public GameScreen(Game game, int level) {
         super(game);
         world = new World();
+        currentLevel = level;
+        initializeLevelAssets();
         Assets.music.stop(); //Halts the main menu music
     }
 
@@ -48,6 +60,34 @@ public class GameScreen extends Screen {
             updatePaused(touchEvents);
         if(state == GameState.GameOver)
             updateGameOver(touchEvents);
+    }
+
+    private void initializeLevelAssets() {
+        if(currentLevel == 1) {
+            levelbackground = Assets.level1background;
+            readyAsset = Assets.level1ready;
+            card1Asset = Assets.lev1card1;
+            card2Asset = Assets.lev1card2;
+            card3Asset = Assets.lev1card3;
+            card4Asset = Assets.lev1card4;
+            card5Asset = Assets.lev1card5;
+        } else if(currentLevel == 2) {
+            levelbackground = Assets.level2background;
+            readyAsset = Assets.level2ready;
+            card1Asset = Assets.lev2card1;
+            card2Asset = Assets.lev2card2;
+            card3Asset = Assets.lev2card3;
+            card4Asset = Assets.lev2card4;
+            card5Asset = Assets.lev2card5;
+        } else if(currentLevel == 3) {
+            levelbackground = Assets.level3background;
+            readyAsset = Assets.level3ready;
+            card1Asset = Assets.lev3card1;
+            card2Asset = Assets.lev3card2;
+            card3Asset = Assets.lev3card3;
+            card4Asset = Assets.lev3card4;
+            card5Asset = Assets.lev3card5;
+        }
     }
 
     private void updateReady(List<TouchEvent> touchEvents) {
@@ -99,7 +139,7 @@ public class GameScreen extends Screen {
                     }
                 }
             } else {
-                //TODO:: This is where the game either needs to end, or something needs to happen
+                //TODO:: Maybe increment the stage here??
                 //world.placeCards();
                 state = GameState.GameOver;
             }
@@ -287,7 +327,7 @@ public class GameScreen extends Screen {
     public void present(float deltaTime) {
         Graphics g = game.getGraphics();
 
-        g.drawPixmap(Assets.background, 0, 0);
+        g.drawPixmap(levelbackground, 0, 0);
         drawWorld(world);
         if(state == GameState.Ready)
             drawReadyUI();
@@ -305,27 +345,12 @@ public class GameScreen extends Screen {
 
     private void drawWorld(World world) {
         Graphics g = game.getGraphics();
-
-        /*
-        Stain stain = world.stain;
-
-        Pixmap stainPixmap = null;
-        if(stain.type == Stain.TYPE_1)
-            stainPixmap = Assets.stain1;
-        if(stain.type == Stain.TYPE_2)
-            stainPixmap = Assets.stain2;
-        if(stain.type == Stain.TYPE_3)
-            stainPixmap = Assets.stain3;
-        int x = stain.x * 32;
-        int y = stain.y * 32;
-        g.drawPixmap(stainPixmap, x, y);
-        */
     }
 
     private void drawReadyUI() {
         Graphics g = game.getGraphics();
 
-        g.drawPixmap(Assets.ready, 47, 100);
+        g.drawPixmap(readyAsset, 47, 100);
         g.drawLine(0, 416, 480, 416, Color.BLACK);
     }
 
@@ -340,15 +365,15 @@ public class GameScreen extends Screen {
 
             Pixmap cardPixmap = null;
             if (topCard.type == Card.TYPE_1)
-                cardPixmap = Assets.card1;
+                cardPixmap = card1Asset;
             if (topCard.type == Card.TYPE_2)
-                cardPixmap = Assets.card2;
+                cardPixmap =card2Asset;
             if (topCard.type == Card.TYPE_3)
-                cardPixmap = Assets.card3;
+                cardPixmap = card3Asset;
             if (topCard.type == Card.TYPE_4)
-                cardPixmap = Assets.card4;
+                cardPixmap = card4Asset;
             if (topCard.type == Card.TYPE_5) {
-                cardPixmap = Assets.card5;
+                cardPixmap = card5Asset;
                 //TODO:: Add particle effect to card
             }
 //        int x = topCard.x * 32;

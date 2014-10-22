@@ -19,18 +19,36 @@ public class Assets {
     public static Pixmap credits2;
     public static Pixmap credits3;
     public static Pixmap numbers;
-    public static Pixmap ready;
     public static Pixmap pause;
     public static Pixmap gameOver;
     public static Pixmap levelSelect;
-    public static Pixmap stageSelect;
 
-    public static Pixmap card1;
-    public static Pixmap card2;
-    public static Pixmap card3;
-    public static Pixmap card4;
-    public static Pixmap card5;
-    //Add other pictures here
+    // Level 1 assets
+    public static Pixmap lev1card1;
+    public static Pixmap lev1card2;
+    public static Pixmap lev1card3;
+    public static Pixmap lev1card4;
+    public static Pixmap lev1card5;
+    public static Pixmap level1background;
+    public static Pixmap level1ready;
+
+    // Level 1 assets
+    public static Pixmap lev2card1;
+    public static Pixmap lev2card2;
+    public static Pixmap lev2card3;
+    public static Pixmap lev2card4;
+    public static Pixmap lev2card5;
+    public static Pixmap level2background;
+    public static Pixmap level2ready;
+
+    // Level 1 assets
+    public static Pixmap lev3card1;
+    public static Pixmap lev3card2;
+    public static Pixmap lev3card3;
+    public static Pixmap lev3card4;
+    public static Pixmap lev3card5;
+    public static Pixmap level3background;
+    public static Pixmap level3ready;
 
     public static Music music;
     public static Sound click;

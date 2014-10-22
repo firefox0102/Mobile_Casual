@@ -21,37 +21,36 @@ public class LevelSelectScreen extends Screen {
         game.getInput().getKeyEvents();
 
         int len = touchEvents.size();
-        for(int i = 0; i < len; i++)
-        {
+        for(int i = 0; i < len; i++) {
             Input.TouchEvent event = touchEvents.get(i);
             if(event.type == Input.TouchEvent.TOUCH_UP)
             {
                 /**
-                 * Goes to stage 1 select
+                 * Goes to Level 1
                  */
                 if(inBounds(event,22,47,71,54))
                 {
-                    game.setScreen(new StageSelectScreen(game));
+                    game.setScreen(new GameScreen(game, 1));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                     return;
                 }
                 /**
-                 * Goes to stage 2 select
+                 * Goes to Level 2
                  */
                 if(inBounds(event,110,47,78,54))
                 {
-                    game.setScreen(new StageSelectScreen2(game));
+                    game.setScreen(new GameScreen(game, 2));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                     return;
                 }
                 /**
-                 * Goes to stage 3 select
+                 * Goes to Level 3
                  */
                 if(inBounds(event,210,47,90,54))
                 {
-                    game.setScreen(new StageSelectScreen3(game));
+                    game.setScreen(new GameScreen(game, 3));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                     return;
@@ -93,6 +92,7 @@ public class LevelSelectScreen extends Screen {
     public void dispose() {
 
     }
+
     private boolean inBounds(Input.TouchEvent event, int x, int y, int width, int height) {
         if(event.x > x && event.x < x + width - 1 &&
                 event.y > y && event.y < y + height - 1)

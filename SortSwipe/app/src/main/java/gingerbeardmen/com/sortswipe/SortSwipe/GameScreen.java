@@ -26,6 +26,7 @@ public class GameScreen extends Screen {
     float gameTime = 0;
     int oldScore = 0;
     int currentLevel;
+    float leveltime = 100;
     String score = "0";
     boolean inFlingEvent = false;
     boolean inShakeEvent = false;
@@ -97,7 +98,8 @@ public class GameScreen extends Screen {
 
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime) {
         int len = touchEvents.size();
-        gameTime += deltaTime;
+
+        leveltime -= deltaTime;
 
         //If the phone is being shaken!!!
         if((game.getmAccel() > 12) && (world.cardList.size() > 0) && (!inShakeEvent && !inFlingEvent)) {
@@ -338,7 +340,7 @@ public class GameScreen extends Screen {
         if(state == GameState.GameOver)
             drawGameOverUI();
         //Timer should go at the top of the screen so that the user can actually see it
-        drawText(g, "" + (int)gameTime, g.getWidth()- 50 - score.length()*20 / 2, 10);
+        drawText(g, "" + (int)leveltime, g.getWidth() - 155 - score.length()*20 / 2, 10);
         //Score goes at the bottom of the screen to utilize the unused screen space down there
         drawText(g, score, g.getWidth()- 50 - score.length()*20 / 2, 10);
     }

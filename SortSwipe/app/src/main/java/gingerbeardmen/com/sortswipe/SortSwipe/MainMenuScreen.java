@@ -1,9 +1,14 @@
 package gingerbeardmen.com.sortswipe.SortSwipe;
 
+import android.media.MediaPlayer;
+
 import java.util.List;
+import java.util.Set;
+
 import gingerbeardmen.com.sortswipe.framework.Game;
 import gingerbeardmen.com.sortswipe.framework.Graphics;
 import gingerbeardmen.com.sortswipe.framework.Input.TouchEvent;
+import gingerbeardmen.com.sortswipe.framework.Music;
 import gingerbeardmen.com.sortswipe.framework.Screen;
 
 /**
@@ -37,8 +42,10 @@ public class MainMenuScreen extends Screen {
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(inBounds(event, 0, g.getHeight() - 64, 64, 64)) {
                     Settings.soundEnabled = !Settings.soundEnabled;
-                    if(Settings.soundEnabled)
+                    if(Settings.soundEnabled) {
                         Assets.click.play(1);
+                        Assets.music.play();
+                    }
                 }
                 if(inBounds(event, 64, 220, 192, 42) ) {
                     game.setScreen(new LevelSelectScreen(game));//level select
@@ -92,15 +99,18 @@ public class MainMenuScreen extends Screen {
     @Override
     public void pause() {
         Settings.save(game.getFileIO());
+        Assets.music.stop();
     }
 
     @Override
     public void resume() {
-
+        if (Settings.soundEnabled) {
+            Assets.music.play();
+        }
     }
 
     @Override
     public void dispose() {
-
+        Assets.music.stop();
     }
 }

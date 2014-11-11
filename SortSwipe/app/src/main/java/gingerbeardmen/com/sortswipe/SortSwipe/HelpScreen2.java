@@ -40,26 +40,26 @@ public class HelpScreen2 extends Screen {
     public void present(float deltaTime) {
         Graphics g = game.getGraphics();
         g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.help2, 64, 100);
+        g.drawPixmap(Assets.help2, 0, 0);
         g.drawPixmap(Assets.buttons, 256, 416, 0, 64, 64, 64);
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
+        Settings.save(game.getFileIO());
+        Assets.music.stop();
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
+        if (Settings.soundEnabled) {
+            Assets.music.play();
+        }
     }
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-
+        Assets.music.stop();
     }
 
 }

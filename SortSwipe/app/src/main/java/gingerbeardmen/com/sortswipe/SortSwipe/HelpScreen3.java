@@ -1,6 +1,8 @@
 package gingerbeardmen.com.sortswipe.SortSwipe;
 
 import java.util.List;
+import java.util.Set;
+
 import gingerbeardmen.com.sortswipe.framework.Game;
 import gingerbeardmen.com.sortswipe.framework.Graphics;
 import gingerbeardmen.com.sortswipe.framework.Screen;
@@ -38,25 +40,25 @@ public class HelpScreen3 extends Screen {
     public void present(float deltaTime) {
         Graphics g = game.getGraphics();
         g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.help3, 64, 100);
+        g.drawPixmap(Assets.help3, 0, 0);
         g.drawPixmap(Assets.buttons, 256, 416, 0, 128, 64, 64);
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
+        Settings.save(game.getFileIO());
+        Assets.music.stop();
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
+        if (Settings.soundEnabled) {
+            Assets.music.play();
+        }
     }
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-
+        Assets.music.stop();
     }
 }

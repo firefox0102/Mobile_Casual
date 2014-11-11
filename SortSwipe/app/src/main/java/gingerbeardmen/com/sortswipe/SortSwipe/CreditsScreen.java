@@ -23,12 +23,10 @@ public class CreditsScreen extends Screen{
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if(event.type == TouchEvent.TOUCH_UP) {
-                if(event.x > 256 && event.y > 416 ) {
-                    game.setScreen(new CreditsScreen2(game));
-                    if(Settings.soundEnabled)
-                        Assets.click.play(1);
-                    return;
-                }
+                game.setScreen(new MainMenuScreen(game));
+                if(Settings.soundEnabled)
+                    Assets.click.play(1);
+                return;
             }
         }
     }
@@ -37,7 +35,7 @@ public class CreditsScreen extends Screen{
     public void present(float deltaTime) {
         Graphics g = game.getGraphics();
         g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.credits1, 64, 100);
+        g.drawPixmap(Assets.credits1, 0, 0);
         g.drawPixmap(Assets.buttons, 256, 416, 0, 64, 64, 64);
     }
 
@@ -48,7 +46,9 @@ public class CreditsScreen extends Screen{
 
     @Override
     public void resume() {
-
+        if (Settings.soundEnabled) {
+            Assets.music.play();
+        }
     }
 
     @Override

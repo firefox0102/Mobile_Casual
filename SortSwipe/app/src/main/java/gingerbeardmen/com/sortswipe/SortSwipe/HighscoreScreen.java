@@ -82,16 +82,19 @@ public class HighscoreScreen extends Screen {
 
     @Override
     public void pause() {
-
+        Settings.save(game.getFileIO());
+        Assets.music.stop();
     }
 
     @Override
     public void resume() {
-
+        if (Settings.soundEnabled) {
+            Assets.music.play();
+        }
     }
 
     @Override
     public void dispose() {
-
+        Assets.music.stop();
     }
 }

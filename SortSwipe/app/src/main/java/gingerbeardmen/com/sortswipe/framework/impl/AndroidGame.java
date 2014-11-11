@@ -14,6 +14,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.Display;
+import android.graphics.Point;
 
 import gingerbeardmen.com.sortswipe.framework.Audio;
 import gingerbeardmen.com.sortswipe.framework.FileIO;
@@ -47,9 +49,23 @@ public abstract class AndroidGame extends Activity implements Game {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        int frameBufferWidth = isLandscape ? 480 : 320;
-        int frameBufferHeight = isLandscape ? 320 : 480;
+        //Getting the size of the display to scale the
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int screenWidth = size.x;
+        int screenHeight = size.y;
+        int frameBufferWidth;
+        int frameBufferHeight;
+        //TODO: Fully implement highres graphics (See - LoadingScreen)
+//        if(screenWidth >= 720 && screenHeight >= 1080) {
+//            frameBufferWidth = 720;
+//            frameBufferHeight = 1080;
+//        } else {
+            frameBufferWidth = 320;
+            frameBufferHeight = 480;
+        //}
+
         Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth,
                 frameBufferHeight, Config.RGB_565);
 

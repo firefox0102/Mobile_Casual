@@ -431,6 +431,7 @@ public class GameScreen extends Screen {
 
     @Override
     public void pause() {
+        Assets.music.stop();
         if(state == GameState.Running)
             state = GameState.Paused;
 
@@ -442,10 +443,13 @@ public class GameScreen extends Screen {
 
     @Override
     public void resume() {
-
+        if (Settings.soundEnabled) {
+            Assets.music.play();
+        }
     }
 
     @Override
     public void dispose() {
+        Assets.music.stop();
     }
 }

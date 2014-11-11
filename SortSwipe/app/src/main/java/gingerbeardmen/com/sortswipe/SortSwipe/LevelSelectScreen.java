@@ -28,7 +28,7 @@ public class LevelSelectScreen extends Screen {
                 /**
                  * Goes to Level 1
                  */
-                if(inBounds(event,22,47,71,54))
+                if(inBounds(event,0,30,320,100))
                 {
                     game.setScreen(new GameScreen(game, 1));
                     if(Settings.soundEnabled)
@@ -38,7 +38,7 @@ public class LevelSelectScreen extends Screen {
                 /**
                  * Goes to Level 2
                  */
-                if(inBounds(event,110,47,78,54))
+                if(inBounds(event,0,123,320,100))
                 {
                     game.setScreen(new GameScreen(game, 2));
                     if(Settings.soundEnabled)
@@ -48,7 +48,7 @@ public class LevelSelectScreen extends Screen {
                 /**
                  * Goes to Level 3
                  */
-                if(inBounds(event,210,47,90,54))
+                if(inBounds(event,0,223,320,100))
                 {
                     game.setScreen(new GameScreen(game, 3));
                     if(Settings.soundEnabled)
@@ -58,12 +58,12 @@ public class LevelSelectScreen extends Screen {
                 /**
                  * Goes back to menu
                  */
-                if(inBounds(event,98,410,124,53))
-                {
-                    game.setScreen(new MainMenuScreen(game));
-                    if(Settings.soundEnabled)
-                        Assets.click.play(1);
-                    return;
+                if (event.type == Input.TouchEvent.TOUCH_UP) {
+                    if (event.x < 64 && event.y > 416) {
+                        game.setScreen(new MainMenuScreen(game));
+                        if (Settings.soundEnabled)
+                            Assets.click.play(1);
+                    }
                 }
 
             }
@@ -75,22 +75,26 @@ public class LevelSelectScreen extends Screen {
         Graphics g = game.getGraphics();
         g.drawPixmap(Assets.background, 0, 0);
         g.drawPixmap(Assets.levelSelect, 0, 0);
+        g.drawPixmap(Assets.buttons, 0, 416, 64, 64, 64, 64);
 
     }
 
     @Override
     public void pause() {
-
+        Settings.save(game.getFileIO());
+        Assets.music.stop();
     }
 
     @Override
     public void resume() {
-
+        if (Settings.soundEnabled) {
+            Assets.music.play();
+        }
     }
 
     @Override
     public void dispose() {
-
+        Assets.music.stop();
     }
 
     private boolean inBounds(Input.TouchEvent event, int x, int y, int width, int height) {

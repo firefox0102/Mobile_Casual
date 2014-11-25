@@ -1,12 +1,17 @@
 package gingerbeardmen.com.sortswipe.SortSwipe;
 
 import java.util.List;
+import java.util.Set;
+
 import android.graphics.Color;
 import android.util.Log;
+
+import gingerbeardmen.com.sortswipe.framework.Audio;
 import gingerbeardmen.com.sortswipe.framework.Game;
 import gingerbeardmen.com.sortswipe.framework.Graphics;
 import gingerbeardmen.com.sortswipe.framework.Input;
 import gingerbeardmen.com.sortswipe.framework.Input.TouchEvent;
+import gingerbeardmen.com.sortswipe.framework.Music;
 import gingerbeardmen.com.sortswipe.framework.Pixmap;
 import gingerbeardmen.com.sortswipe.framework.Screen;
 
@@ -18,16 +23,18 @@ public class GameScreen extends Screen {
         Ready,
         Running,
         Paused,
-        GameOver
+        GameOver,
+        Win
     }
 
     GameState state = GameState.Ready;
     World world;
     float gameTime = 0;
-    int oldScore = 0;
+//    int oldScore = 0;
     int currentLevel;
-    float leveltime = 100;
-    String score = "0";
+    float leveltime = 10;
+    int stage = 1;
+//    String score = "0";
     boolean inFlingEvent = false;
     boolean inShakeEvent = false;
 
@@ -38,6 +45,7 @@ public class GameScreen extends Screen {
     Pixmap card4Asset;
     Pixmap card5Asset;
     Pixmap readyAsset;
+    Pixmap stageAsset;
     Pixmap levelbackground;
 
     public GameScreen(Game game, int level) {
@@ -59,11 +67,13 @@ public class GameScreen extends Screen {
             updateRunning(touchEvents, deltaTime);
         if(state == GameState.Paused)
             updatePaused(touchEvents);
-        if(state == GameState.GameOver)
+        if(state == GameState.GameOver || state == GameState.Win)
             updateGameOver(touchEvents);
     }
 
     private void initializeLevelAssets() {
+        stageAsset = Assets.stage1;
+
         if(currentLevel == 1) {
             levelbackground = Assets.level1background;
             readyAsset = Assets.level1ready;
@@ -100,62 +110,64 @@ public class GameScreen extends Screen {
         int len = touchEvents.size();
 
         leveltime -= deltaTime;
-
-        //If the phone is being shaken!!!
-        if((game.getmAccel() > 12) && (world.cardList.size() > 0) && (!inShakeEvent && !inFlingEvent)) {
-            inShakeEvent = true;
-            checkShakeEvent(world.cardList.get(0));
+        if(leveltime <= 0) {
+            state = GameState.GameOver;
         } else {
-            inShakeEvent = false;
-        }
 
-        for(int i = 0; i < len; i++) {
-            TouchEvent event = touchEvents.get(i);
-
-            //Pause the game
-            if(event.type == Input.TouchEvent.TOUCH_UP) {
-                Log.v("Blah", "Touch event! TOUCH UP!!!!");
-
-                if(event.x < 64 && event.y < 64) {
-                    if(Settings.soundEnabled)
-                        Assets.click.play(1);
-                    state = GameState.Paused;
-                    return;
-                }
+            //If the phone is being shaken!!!
+            if ((game.getmAccel() > 12) && (world.cardList.size() > 0) && (!inShakeEvent && !inFlingEvent)) {
+                inShakeEvent = true;
+                checkShakeEvent(world.cardList.get(0));
+            } else {
+                inShakeEvent = false;
             }
 
-            if(event.type == Input.TouchEvent.TOUCH_DOWN) {
-            }
+            for (int i = 0; i < len; i++) {
+                TouchEvent event = touchEvents.get(i);
 
-            if(world.cardList.size() > 0) {
-                Card topCard = world.cardList.get(0);
+                //Pause the game
+                if (event.type == Input.TouchEvent.TOUCH_UP) {
+                    Log.v("Blah", "Touch event! TOUCH UP!!!!");
 
-                //Dragging Events
-                if (event.type == Input.TouchEvent.TOUCH_DRAGGED) {
-                    Log.v("Blah", "Touch event! Dragged!" + event.x + ", " + event.y);
-                    if(!topCard.hasBeenFlung && !inShakeEvent) {
-                        if ((event.x > topCard.x && event.y > topCard.y) && (event.x < (topCard.x + 100) && event.y < (topCard.y + 100))) {
-                            checkFlingEvent(event.x, event.y, topCard);
-                            inFlingEvent = false;
-                        }
+                    if (event.x < 64 && event.y < 64) {
+                        if (Settings.soundEnabled)
+                            Assets.click.play(1);
+                        state = GameState.Paused;
+                        return;
                     }
                 }
-            } else {
-                //TODO:: Maybe increment the stage here??
-                //world.placeCards();
+
+                if (event.type == Input.TouchEvent.TOUCH_DOWN) {
+                }
+
+                if (world.cardList.size() > 0) {
+                    Card topCard = world.cardList.get(0);
+
+                    //Dragging Events
+                    if (event.type == Input.TouchEvent.TOUCH_DRAGGED) {
+                        Log.v("Blah", "Touch event! Dragged!" + event.x + ", " + event.y);
+                        if (!topCard.hasBeenFlung && !inShakeEvent) {
+                            if ((event.x > topCard.x && event.y > topCard.y) && (event.x < (topCard.x + 100) && event.y < (topCard.y + 100))) {
+                                checkFlingEvent(event.x, event.y, topCard);
+                                inFlingEvent = false;
+                            }
+                        }
+                    }
+                } else {
+                    nextStage(world);
+                }
+            }
+
+            world.update(deltaTime);
+            if (world.gameOver) {
+                if (Settings.soundEnabled)
+                    Assets.explosion.play(1);
                 state = GameState.GameOver;
             }
-        }
-
-        world.update(deltaTime);
-        if(world.gameOver) {
-            if(Settings.soundEnabled)
-                Assets.explosion.play(1);
-            state = GameState.GameOver;
-        }
-        if(oldScore != world.score) {
-            oldScore = world.score;
-            score = "" + oldScore;
+//        if(oldScore != world.score) {
+//            oldScore = world.score;
+//            score = "" + oldScore;
+//        }
         }
     }
 
@@ -260,7 +272,7 @@ public class GameScreen extends Screen {
         boolean success = false;
         if(topCard.type == type) {
             if(topCard.type == Card.TYPE_5) {
-                Assets.explosion.play(1);
+                    Assets.explosion.play(1);
                 world.score += 5;
             } else {
                 Assets.success.play(1);
@@ -325,6 +337,39 @@ public class GameScreen extends Screen {
         return true;
     }
 
+    private void nextStage(World world) {
+        //Play sound
+        Assets.nextlevel.play(1);
+        switch (stage) {
+            case 1:
+                //Change stage image to Stage 2
+                stage = 2;
+                stageAsset = Assets.stage2;
+                //Increment game time
+                leveltime += 10;
+                break;
+            case 2:
+                //Change stage image to Stage 3
+                stage = 3;
+                stageAsset = Assets.stage3;
+                //Increment game time
+                leveltime += 10;
+                break;
+            case 3:
+                //Change stage image to Stage 4
+                stage = 4;
+                stageAsset = Assets.stage4;
+                //Increment game time
+                leveltime += 10;
+                break;
+            case 4:
+                //YOU WIN!
+                state = GameState.Win;
+                break;
+        }
+        world.placeCards(stage);
+    }
+
     @Override
     public void present(float deltaTime) {
         Graphics g = game.getGraphics();
@@ -339,10 +384,17 @@ public class GameScreen extends Screen {
             drawPausedUI();
         if(state == GameState.GameOver)
             drawGameOverUI();
-        //Timer should go at the top of the screen so that the user can actually see it
-        drawText(g, "" + (int)leveltime, g.getWidth() - 155 - score.length()*20 / 2, 10);
-        //Score goes at the bottom of the screen to utilize the unused screen space down there
-        drawText(g, score, g.getWidth()- 50 - score.length()*20 / 2, 10);
+        if(state == GameState.Win)
+            drawWinUI();
+        if(state != GameState.GameOver || state != GameState.Win || state != GameState.Paused) {
+            //Timer should go at the top of the screen so that the user can actually see it
+            drawText(g, "" + (int) leveltime, g.getWidth() - 155 / 2, 440);
+            //Score goes at the bottom of the screen to utilize the unused screen space down there
+//            drawText(g, score, g.getWidth() - 50 - score.length() * 20 / 2, 450);
+        } else {
+            //Score goes at the bottom of the screen to utilize the unused screen space down there
+            //drawText(g, "Score: " + score, 220, 100);
+        }
     }
 
     private void drawWorld(World world) {
@@ -361,7 +413,7 @@ public class GameScreen extends Screen {
 
         //Pause button
         g.drawPixmap(Assets.buttons, 0, 0, 64, 128, 64, 64);
-
+        g.drawPixmap(stageAsset, 90, 10);
         if(world.cardList.size() > 0) {
             Card topCard = world.cardList.get(0);
 
@@ -399,8 +451,14 @@ public class GameScreen extends Screen {
     private void drawGameOverUI() {
         Graphics g = game.getGraphics();
 
-        g.drawPixmap(Assets.gameOver, 62, 100);
+        g.drawPixmap(Assets.gameOver, 0, 100);
+        g.drawPixmap(Assets.buttons, 128, 200, 0, 128, 64, 64);
+    }
 
+    private void drawWinUI() {
+        Graphics g = game.getGraphics();
+        //TODO: Add winner image here
+        g.drawPixmap(Assets.gameOver, 0, 100);
         g.drawPixmap(Assets.buttons, 128, 200, 0, 128, 64, 64);
     }
 
@@ -443,9 +501,7 @@ public class GameScreen extends Screen {
 
     @Override
     public void resume() {
-        if (Settings.soundEnabled) {
-            Assets.music.play();
-        }
+            Assets.music.stop();
     }
 
     @Override

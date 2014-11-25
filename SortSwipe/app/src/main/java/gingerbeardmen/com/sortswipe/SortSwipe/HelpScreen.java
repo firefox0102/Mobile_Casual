@@ -24,7 +24,9 @@ public class HelpScreen extends Screen {
             TouchEvent event = touchEvents.get(i);
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(event.x > 256 && event.y > 416 ) {
-                    game.setScreen(new HelpScreen2(game));
+                    //TODO: After implementing all art, add SORT help screen
+                    //game.setScreen(new HelpScreen2(game));
+                    game.setScreen(new HelpScreen3(game));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                     return;

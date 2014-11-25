@@ -16,7 +16,7 @@ public class World {
     static final float TICK_DECREMENT = 0.05f;
 
     public List<Card> cardList = new ArrayList<Card>();
-    public boolean gameOver = false;;
+    public boolean gameOver = false;
     public int score = 0;
 
     boolean fields[][] = new boolean[WORLD_WIDTH][WORLD_HEIGHT];
@@ -25,14 +25,46 @@ public class World {
     static float tick = TICK_INITIAL;
 
     public World() {
-        //TODO initialize game objects
-        placeCards();
+        placeCards(1);
     }
 
-    public void placeCards() {
-        //TODO:: build the stack of cards
-        for(int i = 0; i < 15; i++) {
-            cardList.add(new Card(random.nextInt(5)));
+    public void placeCards(int stage) {
+        //TODO:: switch statement for stage
+        switch (stage) {
+            case 1:
+                for(int i = 0; i < 6; i++) {
+                    cardList.add(new Card(random.nextInt(2)));
+                }
+                break;
+            case 2:
+                for(int i = 0; i < 10; i++) {
+                    cardList.add(new Card(random.nextInt(4)));
+                }
+                break;
+            case 3:
+                int x = 0;
+                for(int i = 0; i < 15; i++) {
+                    Card c = new Card(random.nextInt(5));
+                    if(c.type == Card.TYPE_5)
+                        x++;
+                    if(x < 2)
+                        cardList.add(new Card(random.nextInt(5)));
+                    else
+                        cardList.add(new Card(random.nextInt(4)));
+                }
+                break;
+            case 4:
+                int y = 0;
+                for(int i = 0; i < 17; i++) {
+                    Card c = new Card(random.nextInt(5));
+                    if(c.type == Card.TYPE_5)
+                        y++;
+                    if(y < 4)
+                        cardList.add(new Card(random.nextInt(5)));
+                    else
+                        cardList.add(new Card(random.nextInt(4)));
+                }
+                break;
         }
     }
 

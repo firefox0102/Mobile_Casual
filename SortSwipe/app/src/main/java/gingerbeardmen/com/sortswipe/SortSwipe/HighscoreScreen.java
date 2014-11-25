@@ -44,7 +44,7 @@ public class HighscoreScreen extends Screen {
         Graphics g = game.getGraphics();
 
         g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.mainMenu, 64, 20, 0, 42, 196, 42);
+        g.drawPixmap(Assets.highScoreBanner, 0, 20);
 
         int y = 100;
         for (int i = 0; i < 5; i++) {

@@ -11,6 +11,7 @@ public class Assets {
     public static Pixmap background;
     public static Pixmap logo;
     public static Pixmap mainMenu;
+    public static Pixmap highScoreBanner;
     public static Pixmap buttons;
     public static Pixmap help1;
     public static Pixmap help2;
@@ -48,9 +49,15 @@ public class Assets {
     public static Pixmap level3background;
     public static Pixmap level3ready;
 
+    public static Pixmap stage1;
+    public static Pixmap stage2;
+    public static Pixmap stage3;
+    public static Pixmap stage4;
+
     public static Music music;
     public static Sound click;
     public static Sound success;
     public static Sound fail;
     public static Sound explosion;
+    public static Sound nextlevel;
 }

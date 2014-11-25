@@ -23,6 +23,7 @@ public class LoadingScreen extends Screen {
             //assetsFolder = "highres/";
         Assets.logo = g.newPixmap(assetsFolder +"logo.png", PixmapFormat.ARGB4444);
         Assets.mainMenu = g.newPixmap(assetsFolder +"mainmenu.png", PixmapFormat.ARGB4444);
+        Assets.highScoreBanner = g.newPixmap(assetsFolder +"highscores.png", PixmapFormat.ARGB4444);
         Assets.buttons = g.newPixmap(assetsFolder +"buttons.png", PixmapFormat.ARGB4444);
         Assets.help1 = g.newPixmap(assetsFolder +"help1.png", PixmapFormat.ARGB4444);
         Assets.help2 = g.newPixmap(assetsFolder +"help2.png", PixmapFormat.ARGB4444);
@@ -34,6 +35,12 @@ public class LoadingScreen extends Screen {
         Assets.levelSelect = g.newPixmap(assetsFolder +"levelSelect.png", PixmapFormat.ARGB4444);
         Assets.background = g.newPixmap(assetsFolder +"background.png", PixmapFormat.RGB565);
 
+        //Stages
+        Assets.stage1 = g.newPixmap(assetsFolder +"stage1.png", PixmapFormat.RGB565);
+        Assets.stage2 = g.newPixmap(assetsFolder +"stage2.png", PixmapFormat.RGB565);
+        Assets.stage3 = g.newPixmap(assetsFolder +"stage3.png", PixmapFormat.RGB565);
+        Assets.stage4 = g.newPixmap(assetsFolder +"stage4.png", PixmapFormat.RGB565);
+
         //Loading level 1 assets
         Assets.lev1card1 = g.newPixmap(assetsFolder +"level1/level1card1.png", PixmapFormat.ARGB4444);
         Assets.lev1card2 = g.newPixmap(assetsFolder +"level1/level1card2.png", PixmapFormat.ARGB4444);
@@ -41,7 +48,7 @@ public class LoadingScreen extends Screen {
         Assets.lev1card4 = g.newPixmap(assetsFolder +"level1/level1card4.png", PixmapFormat.ARGB4444);
         Assets.lev1card5 = g.newPixmap(assetsFolder +"level1/level1card5.png", PixmapFormat.ARGB4444);
         Assets.level1background = g.newPixmap(assetsFolder +"level1/level1background.png", PixmapFormat.RGB565);
-        Assets.level1ready = g.newPixmap(assetsFolder +"level1/level1ready.png", PixmapFormat.ARGB4444);
+        Assets.level1ready = g.newPixmap(assetsFolder +"level1/levelStart.png", PixmapFormat.ARGB4444);
 
         //Loading level 2 assets
         Assets.lev2card1 = g.newPixmap(assetsFolder +"level2/level2card1.png", PixmapFormat.ARGB4444);
@@ -50,7 +57,7 @@ public class LoadingScreen extends Screen {
         Assets.lev2card4 = g.newPixmap(assetsFolder +"level2/level2card4.png", PixmapFormat.ARGB4444);
         Assets.lev2card5 = g.newPixmap(assetsFolder +"level2/level2card5.png", PixmapFormat.ARGB4444);
         Assets.level2background = g.newPixmap(assetsFolder +"level2/level2background.png", PixmapFormat.RGB565);
-        Assets.level2ready = g.newPixmap(assetsFolder +"level2/level2ready.png", PixmapFormat.ARGB4444);
+        Assets.level2ready = g.newPixmap(assetsFolder +"level2/levelStart.png", PixmapFormat.ARGB4444);
 
         //Loading level 3 assets
         Assets.lev3card1 = g.newPixmap(assetsFolder +"level3/level3card1.png", PixmapFormat.ARGB4444);
@@ -59,13 +66,14 @@ public class LoadingScreen extends Screen {
         Assets.lev3card4 = g.newPixmap(assetsFolder +"level3/level3card4.png", PixmapFormat.ARGB4444);
         Assets.lev3card5 = g.newPixmap(assetsFolder +"level3/level3card5.png", PixmapFormat.ARGB4444);
         Assets.level3background = g.newPixmap(assetsFolder +"level3/level3background.png", PixmapFormat.RGB565);
-        Assets.level3ready = g.newPixmap(assetsFolder +"level3/level3ready.png", PixmapFormat.ARGB4444);
+        Assets.level3ready = g.newPixmap(assetsFolder +"level3/levelStart.png", PixmapFormat.ARGB4444);
 
         //Sound Assets
         Assets.click = game.getAudio().newSound("audioAssets/click.wav");
         Assets.success = game.getAudio().newSound("audioAssets/success.wav");
         Assets.fail = game.getAudio().newSound("audioAssets/fail.wav");
         Assets.explosion = game.getAudio().newSound("audioAssets/explode.wav");
+        Assets.nextlevel = game.getAudio().newSound("audioAssets/nextlevel.wav");
         //Game Music
         //YEAH by Nicholas Shooter, may be found at https://soundcloud.com/nicholas-shooter/yeah
         Assets.music = game.getAudio().newMusic("audioAssets/music.wav");
